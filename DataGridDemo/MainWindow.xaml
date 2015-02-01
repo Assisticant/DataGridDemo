@@ -3,12 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
-    <Grid>
+    <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <DataGrid Grid.Column="0"
+                  Margin="5"
                   ItemsSource="{Binding GridSource.Items}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
@@ -18,14 +19,22 @@
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <ListBox Grid.Row="0" ItemsSource="{Binding Items}">
+            <ListBox Grid.Row="0" Margin="5" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+            <StackPanel Grid.Row="1">
+                <TextBox Margin="5" Text="{Binding ItemDetail.Name}" />
+                <Button Margin="5" Command="{Binding AddItem}">Add</Button>
+                <Button Margin="5" Command="{Binding DeleteItem}">Delete</Button>
+                <Button Margin="5" Command="{Binding MoveItemUp}">Up</Button>
+                <Button Margin="5" Command="{Binding MoveItemDown}">Down</Button>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>
