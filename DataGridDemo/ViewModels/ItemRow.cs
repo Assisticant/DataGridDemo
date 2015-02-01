@@ -17,6 +17,11 @@ namespace DataGridDemo.ViewModels
             _item = item;            
         }
 
+        public Item Item
+        {
+            get { return _item; }
+        }
+
         public string Name
         {
             get

@@ -9,18 +9,21 @@ namespace DataGridDemo.Containers
 {
     public class BindingListAdapter<T>
     {
-        private readonly Func<T> _addNewItem;
+        private readonly Func<T> _factory;
+        private readonly Action<int, T> _insert;
 
         private BindingList<T> _bindingList;
         private ComputedSubscription _subscription;
-        private List<ItemContainer<T>> _itemContainers = new List<ItemContainer<T>>();
+        private bool _updating = false;
         
-        public BindingListAdapter(Func<IEnumerable<T>> getItems, Func<T> addNewItem)
+        public BindingListAdapter(Func<IEnumerable<T>> getItems, Func<T> factory, Action<int, T> insert)
         {
-            _addNewItem = addNewItem;
+            _factory = factory;
+            _insert = insert;
 
             _bindingList = new BindingList<T>();
             _bindingList.AddingNew += AddingNewItem;
+            _bindingList.ListChanged += ItemListChanged;
             _bindingList.AllowNew = true;
             _bindingList.AllowEdit = true;
             _bindingList.AllowRemove = true;
@@ -36,26 +39,61 @@ namespace DataGridDemo.Containers
 
         private void AddingNewItem(object sender, AddingNewEventArgs e)
         {
-            e.NewObject = _addNewItem();
+            e.NewObject = _factory();
+        }
+
+        private void ItemListChanged(object sender, ListChangedEventArgs e)
+        {
+            if (!_updating)
+            {
+                var scheduler = UpdateScheduler.Begin();
+
+                try
+                {
+                    if (e.ListChangedType == ListChangedType.ItemAdded)
+                    {
+                        int index = e.NewIndex;
+                        T item = _bindingList[index];
+                        _insert(index, item);
+                    }
+                }
+                finally
+                {
+                    var updates = scheduler.End();
+                    foreach (var update in updates)
+                    {
+                        update();
+                    }
+                }
+            }
         }
 
         private void UpdateBindingList(List<T> items)
         {
-            using (var bin = new RecycleBin<ItemContainer<T>>(_itemContainers))
+            _updating = true;
+
+            try
             {
-                _itemContainers.Clear();
-                foreach (var item in items)
+                var _itemContainers = new List<ItemContainer<T>>();
+                using (var bin = new RecycleBin<ItemContainer<T>>(_bindingList.Select(i => new ItemContainer<T>(i, _bindingList, true))))
                 {
-                    var itemContainer = bin.Extract(new ItemContainer<T>(item, _bindingList));
-                    _itemContainers.Add(itemContainer);
+                    foreach (var item in items)
+                    {
+                        var itemContainer = bin.Extract(new ItemContainer<T>(item, _bindingList, false));
+                        _itemContainers.Add(itemContainer);
+                    }
+                }
+
+                int index = 0;
+                foreach (var itemContainer in _itemContainers)
+                {
+                    itemContainer.EnsureInCollection(index);
+                    index++;
                 }
             }
-
-            int index = 0;
-            foreach (var itemContainer in _itemContainers)
+            finally
             {
-                itemContainer.EnsureInCollection(index);
-                index++;
+                _updating = false;
             }
         }
     }

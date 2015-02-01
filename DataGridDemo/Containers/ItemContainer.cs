@@ -7,13 +7,13 @@ namespace DataGridDemo.Containers
     {
         private readonly T _item;
         private readonly BindingList<T> _bindingList;
+        private readonly bool _inCollection;
 
-        private bool _inCollection = false;
-
-        public ItemContainer(T item, BindingList<T> bindingList)
+        public ItemContainer(T item, BindingList<T> bindingList, bool inCollection)
         {
             _item = item;
             _bindingList = bindingList;
+            _inCollection = inCollection;
         }
 
         public T Item
@@ -26,7 +26,6 @@ namespace DataGridDemo.Containers
             if (!_inCollection)
             {
                 _bindingList.Insert(index, _item);
-                _inCollection = true;
             }
             else if (!Object.Equals(_bindingList[index], _item))
             {
