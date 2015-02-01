@@ -23,7 +23,7 @@ namespace DataGridDemo.ViewModels
                 i => _document.RemoveAt(i));
         }
 
-        public BindingList<ItemRow> Items
+        public BindingList<object> Items
         {
             get { return _gridItems.BindingList; }
         }

@@ -8,12 +8,13 @@ using System.Linq;
 namespace DataGridDemo.Containers
 {
     public class BindingListAdapter<T>
+        where T: class
     {
         private readonly Func<T> _factory;
         private readonly Action<int, T> _insert;
         private readonly Action<int> _remove;
 
-        private BindingList<T> _bindingList;
+        private BindingList<object> _bindingList;
         private ComputedSubscription _subscription;
         private bool _updating = false;
         
@@ -27,7 +28,7 @@ namespace DataGridDemo.Containers
             _insert = insert;
             _remove = remove;
 
-            _bindingList = new BindingList<T>();
+            _bindingList = new BindingList<object>();
             _bindingList.AddingNew += AddingNewItem;
             _bindingList.ListChanged += ItemListChanged;
             _bindingList.AllowNew = true;
@@ -38,14 +39,14 @@ namespace DataGridDemo.Containers
                 .Subscribe(UpdateBindingList);
         }
 
-        public BindingList<T> BindingList
+        public BindingList<object> BindingList
         {
             get { return _bindingList; }
         }
 
         private void AddingNewItem(object sender, AddingNewEventArgs e)
         {
-            e.NewObject = _factory();
+            e.NewObject = ForView.Wrap(_factory());
         }
 
         private void ItemListChanged(object sender, ListChangedEventArgs e)
@@ -59,7 +60,7 @@ namespace DataGridDemo.Containers
                     if (e.ListChangedType == ListChangedType.ItemAdded)
                     {
                         int index = e.NewIndex;
-                        T item = _bindingList[index];
+                        T item = ForView.Unwrap<T>(_bindingList[index]);
                         _insert(index, item);
                     }
                     else if (e.ListChangedType == ListChangedType.ItemDeleted)
@@ -86,7 +87,7 @@ namespace DataGridDemo.Containers
             try
             {
                 var _itemContainers = new List<ItemContainer<T>>();
-                using (var bin = new RecycleBin<ItemContainer<T>>(_bindingList.Select(i => new ItemContainer<T>(i, _bindingList, true))))
+                using (var bin = new RecycleBin<ItemContainer<T>>(_bindingList.Select(obj => new ItemContainer<T>(ForView.Unwrap<T>(obj), _bindingList, true))))
                 {
                     foreach (var item in items)
                     {

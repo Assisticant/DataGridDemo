@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assisticant;
+using System;
 using System.ComponentModel;
 
 namespace DataGridDemo.Containers
@@ -6,10 +7,10 @@ namespace DataGridDemo.Containers
     class ItemContainer<T> : IDisposable
     {
         private readonly T _item;
-        private readonly BindingList<T> _bindingList;
+        private readonly BindingList<object> _bindingList;
         private readonly bool _inCollection;
 
-        public ItemContainer(T item, BindingList<T> bindingList, bool inCollection)
+        public ItemContainer(T item, BindingList<object> bindingList, bool inCollection)
         {
             _item = item;
             _bindingList = bindingList;
@@ -23,14 +24,15 @@ namespace DataGridDemo.Containers
 
         public void EnsureInCollection(int index)
         {
+            object wrapper = ForView.Wrap(_item);
             if (!_inCollection)
             {
-                _bindingList.Insert(index, _item);
+                _bindingList.Insert(index, wrapper);
             }
-            else if (!Object.Equals(_bindingList[index], _item))
+            else if (!Object.Equals(_bindingList[index], wrapper))
             {
-                _bindingList.Remove(_item);
-                _bindingList.Insert(index, _item);
+                _bindingList.Remove(wrapper);
+                _bindingList.Insert(index, wrapper);
             }
         }
 
@@ -38,7 +40,7 @@ namespace DataGridDemo.Containers
         {
             if (_inCollection)
             {
-                _bindingList.Remove(_item);
+                _bindingList.Remove(ForView.Wrap(_item));
             }
         }
 
