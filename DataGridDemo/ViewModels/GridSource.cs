@@ -1,10 +1,7 @@
 using DataGridDemo.Containers;
 using DataGridDemo.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 
 namespace DataGridDemo.ViewModels
 {
@@ -20,7 +17,7 @@ namespace DataGridDemo.ViewModels
             _document = document;
 
             _gridItems = new BindingListAdapter<ItemRow>(() => _document.Items
-                .Select(i => new ItemRow(i)));
+                .Select(i => new ItemRow(i)), () => new ItemRow(_document.NewItem()));
         }
 
         public BindingList<ItemRow> Items

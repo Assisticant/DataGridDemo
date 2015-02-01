@@ -1,15 +1,16 @@
+using Assisticant.Fields;
 using DataGridDemo.Models;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 
 namespace DataGridDemo.ViewModels
 {
     public class ItemRow : IEditableObject
     {
         private readonly Item _item;
+
+        private Observable<bool> _editing = new Observable<bool>(false);
+        private Observable<string> _name = new Observable<string>();
 
         public ItemRow(Item item)
         {
@@ -18,23 +19,37 @@ namespace DataGridDemo.ViewModels
 
         public string Name
         {
-            get { return _item.Name; }
-            set { _item.Name = value; }
+            get
+            {
+                if (_editing.Value)
+                    return _name.Value;
+                else
+                    return _item.Name;
+            }
+            set
+            {
+                if (_editing.Value)
+                    _name.Value = value;
+                else
+                    _item.Name = value;
+            }
         }
 
         public void BeginEdit()
         {
-            throw new NotImplementedException();
+            _editing.Value = true;
+            _name.Value = _item.Name;
         }
 
         public void CancelEdit()
         {
-            throw new NotImplementedException();
+            _editing.Value = false;
         }
 
         public void EndEdit()
         {
-            throw new NotImplementedException();
+            _editing.Value = false;
+            _item.Name = _name.Value;
         }
 
         public override bool Equals(object obj)

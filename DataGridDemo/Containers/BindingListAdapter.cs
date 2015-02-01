@@ -9,12 +9,16 @@ namespace DataGridDemo.Containers
 {
     public class BindingListAdapter<T>
     {
+        private readonly Func<T> _addNewItem;
+
         private BindingList<T> _bindingList;
         private ComputedSubscription _subscription;
         private List<ItemContainer<T>> _itemContainers = new List<ItemContainer<T>>();
-
-        public BindingListAdapter(Func<IEnumerable<T>> getItems)
+        
+        public BindingListAdapter(Func<IEnumerable<T>> getItems, Func<T> addNewItem)
         {
+            _addNewItem = addNewItem;
+
             _bindingList = new BindingList<T>();
             _bindingList.AddingNew += AddingNewItem;
             _bindingList.AllowNew = true;
@@ -32,7 +36,7 @@ namespace DataGridDemo.Containers
 
         private void AddingNewItem(object sender, AddingNewEventArgs e)
         {
-            throw new NotImplementedException();
+            e.NewObject = _addNewItem();
         }
 
         private void UpdateBindingList(List<T> items)
