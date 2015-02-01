@@ -19,7 +19,8 @@ namespace DataGridDemo.ViewModels
             _gridItems = new BindingListAdapter<ItemRow>(
                 () => _document.Items.Select(i => new ItemRow(i)),
                 () => new ItemRow(new Item()),
-                (i, row) => _document.InsertItem(i, row.Item));
+                (i, row) => _document.InsertItem(i, row.Item),
+                i => _document.RemoveAt(i));
         }
 
         public BindingList<ItemRow> Items

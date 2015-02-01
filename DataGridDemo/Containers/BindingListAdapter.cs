@@ -11,15 +11,21 @@ namespace DataGridDemo.Containers
     {
         private readonly Func<T> _factory;
         private readonly Action<int, T> _insert;
+        private readonly Action<int> _remove;
 
         private BindingList<T> _bindingList;
         private ComputedSubscription _subscription;
         private bool _updating = false;
         
-        public BindingListAdapter(Func<IEnumerable<T>> getItems, Func<T> factory, Action<int, T> insert)
+        public BindingListAdapter(
+            Func<IEnumerable<T>> getItems,
+            Func<T> factory,
+            Action<int, T> insert,
+            Action<int> remove)
         {
             _factory = factory;
             _insert = insert;
+            _remove = remove;
 
             _bindingList = new BindingList<T>();
             _bindingList.AddingNew += AddingNewItem;
@@ -55,6 +61,11 @@ namespace DataGridDemo.Containers
                         int index = e.NewIndex;
                         T item = _bindingList[index];
                         _insert(index, item);
+                    }
+                    else if (e.ListChangedType == ListChangedType.ItemDeleted)
+                    {
+                        int index = e.NewIndex;
+                        _remove(index);
                     }
                 }
                 finally

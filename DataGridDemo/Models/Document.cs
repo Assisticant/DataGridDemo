@@ -41,6 +41,11 @@ namespace DataGridDemo.Models
             _items.Insert(index, item);
         }
 
+        public void RemoveAt(int index)
+        {
+            _items.RemoveAt(index);
+        }
+
         public bool CanMoveDown(Item item)
         {
             return _items.IndexOf(item) < _items.Count - 1;
