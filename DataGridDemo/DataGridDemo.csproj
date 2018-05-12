@@ -34,11 +34,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assisticant">
-      <HintPath>..\packages\Assisticant.1.1.4.1\lib\net45\Assisticant.dll</HintPath>
+    <Reference Include="Assisticant, Version=2.3.0.0, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Assisticant.1.5.1\lib\net45\Assisticant.dll</HintPath>
     </Reference>
-    <Reference Include="Assisticant.XAML">
-      <HintPath>..\packages\Assisticant.1.1.4.1\lib\net45\Assisticant.XAML.dll</HintPath>
+    <Reference Include="Assisticant.XAML, Version=2.3.0.0, Culture=neutral, PublicKeyToken=19e83a8289e31a8f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Assisticant.1.5.1\lib\net45\Assisticant.XAML.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -60,12 +60,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Containers\BindingListAdapter.cs" />
-    <Compile Include="Containers\ItemContainer.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\Selection.cs" />
-    <Compile Include="ViewModels\GridSource.cs" />
     <Compile Include="ViewModels\ItemHeader.cs" />
     <Compile Include="ViewModels\ItemRow.cs" />
     <Compile Include="ViewModels\ItemViewModel.cs" />

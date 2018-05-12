@@ -10,7 +10,7 @@
         </Grid.ColumnDefinitions>
         <DataGrid Grid.Column="0"
                   Margin="5"
-                  ItemsSource="{Binding GridSource.Items}" AutoGenerateColumns="False">
+                  ItemsSource="{Binding Rows}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
             </DataGrid.Columns>

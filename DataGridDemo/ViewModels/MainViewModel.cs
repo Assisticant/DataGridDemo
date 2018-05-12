@@ -15,7 +15,19 @@ namespace DataGridDemo.ViewModels
 			_selection = selection;
         }
 
-        public GridSource GridSource => new GridSource(_document);
+        public IEnumerable<ItemRow> Rows =>
+            from item in _document.Items
+            select new ItemRow(item);
+
+        public ItemRow NewItemInRows()
+        {
+            return new ItemRow(_document.NewItem());
+        }
+
+        public void DeleteItemFromRows(ItemRow i)
+        {
+            _document.DeleteItem(i.Item);
+        }
 
         public IEnumerable<ItemHeader> Items =>
             from item in _document.Items
