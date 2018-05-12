@@ -1,4 +1,3 @@
-using System.Linq;
 using Assisticant.Fields;
 
 namespace DataGridDemo.Models
@@ -9,8 +8,8 @@ namespace DataGridDemo.Models
 
         public Item SelectedItem
         {
-            get { return _selectedItem; }
-            set { _selectedItem.Value = value; }
+            get => _selectedItem;
+            set => _selectedItem.Value = value;
         }
     }
 }

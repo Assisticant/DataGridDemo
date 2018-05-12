@@ -17,10 +17,7 @@ namespace DataGridDemo.Containers
             _inCollection = inCollection;
         }
 
-        public T Item
-        {
-            get { return _item; }
-        }
+        public T Item => _item;
 
         public void EnsureInCollection(int index)
         {

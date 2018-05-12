@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Assisticant;
 using DataGridDemo.Models;
 
@@ -22,22 +17,15 @@ namespace DataGridDemo.ViewModels
 			_selection = new Selection();
         }
 
-        public object Main
-        {
-            get { return ViewModel(() => new MainViewModel(_document, _selection)); }
-        }
+        public object Main =>
+            ViewModel(() => new MainViewModel(_document, _selection));
 
-		public object Item
-		{
-			get
-			{
-				return ViewModel(() => _selection.SelectedItem == null
-					? null
-					: new ItemViewModel(_selection.SelectedItem));
-			}
-		}
+        public object Item =>
+            ViewModel(() => _selection.SelectedItem == null
+			    ? null
+			    : new ItemViewModel(_selection.SelectedItem));
 
-		private Document LoadDocument()
+        private Document LoadDocument()
 		{
 			// TODO: Load your document here.
             Document document = new Document();

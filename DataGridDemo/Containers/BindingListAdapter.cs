@@ -39,10 +39,7 @@ namespace DataGridDemo.Containers
                 .Subscribe(UpdateBindingList);
         }
 
-        public BindingList<object> BindingList
-        {
-            get { return _bindingList; }
-        }
+        public BindingList<object> BindingList => _bindingList;
 
         private void AddingNewItem(object sender, AddingNewEventArgs e)
         {

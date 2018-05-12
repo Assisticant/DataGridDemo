@@ -23,10 +23,7 @@ namespace DataGridDemo.ViewModels
                 i => _document.RemoveAt(i));
         }
 
-        public BindingList<object> Items
-        {
-            get { return _gridItems.BindingList; }
-        }
+        public BindingList<object> Items => _gridItems.BindingList;
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

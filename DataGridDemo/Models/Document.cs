@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Assisticant.Collections;
 using Assisticant.Fields;
+using System.Collections.Generic;
 
 namespace DataGridDemo.Models
 {
@@ -14,15 +10,12 @@ namespace DataGridDemo.Models
         private ObservableList<Item> _items = new ObservableList<Item>();
 
 		public string Name
-		{
-			get { return _name; }
-			set { _name.Value = value; }
-		}
-
-        public IEnumerable<Item> Items
         {
-            get { return _items; }
+            get => _name;
+            set => _name.Value = value;
         }
+
+        public IEnumerable<Item> Items => _items;
 
         public Item NewItem()
         {
@@ -46,15 +39,11 @@ namespace DataGridDemo.Models
             _items.RemoveAt(index);
         }
 
-        public bool CanMoveDown(Item item)
-        {
-            return _items.IndexOf(item) < _items.Count - 1;
-        }
+        public bool CanMoveDown(Item item) =>
+            _items.IndexOf(item) < _items.Count - 1;
 
-        public bool CanMoveUp(Item item)
-        {
-            return _items.IndexOf(item) > 0;
-        }
+        public bool CanMoveUp(Item item) =>
+            _items.IndexOf(item) > 0;
 
         public void MoveDown(Item item)
         {
