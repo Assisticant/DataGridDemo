@@ -1,19 +1,12 @@
 # GridView Demo
 
-Demonstrates how Assisticant can be used with a control that expects a BindingList<T>. At the current state, this demo is far too involved. The reusable code in the Containers folder should become part of the library itself, at which point this demo will become a simple illustration of how to use that class.
+Demonstrates how Assisticant can be used with a control that expects a BindingList<T>. Use the [following conventions](http://assisticant.net/collections.html#bindinglistt) within the view model:
 
-## BindingListAdapter
+- A property that returns `IEnumerable<ItemType>`
+- A method called `NewItemIn` and the name of the property that returns `ItemType`.
+- A method called `DeleteItemFrom` and the name of the property that takes `ItemType`.
 
-Nevertheless, here's how the code currently works. The BindingListAdapter class in the Containers folder is the primary logic. It uses a ComuptedSubscription and object recycling to synchronize a BindingList<object> with a source collection. And when the control manipulates the BindingList<object>, it calls delegates to make the corresponding changes in the source collection.
-
-To construct a BindingListAdapter, provide four delegates.
-
-* **GetItems**: Produce the collection of items to place in the list. This could be raw model objects, but I recommend view models. If you do provide a list of view models, use Select(m => new VM(m)) to project into a collection of view models.
-* **Factory**: Create a new instance of the item in the list. *Do not add the object to the source list.* If the list contains view models, as I recommend, create a new model and a new view model.
-* **Insert**: Add the provided item to the source list at the specified index. If the item is a view model, extract the model from it and add it to the list of models.
-* **Remove**: Remove the item at the specified index.
-
-Return the BindingList property from your view model to data bind to the GridView.
+Previous versions of this demo included a class called `BindingListAdapter`. Look at the revision history to see how much code can be saved by using the new conventions.
 
 ## AutoGenerateColumns
 
